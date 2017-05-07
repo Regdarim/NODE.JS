@@ -1,12 +1,12 @@
 {
-  "name": "1.3",
+  "name": "1.4",
   "version": "1.0.0",
   "description": "",
-  "main": "program.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node program.js"
-  },
+	"start": "node app/program.js"
+},
   "keywords": [],
   "author": "",
   "license": "ISC"
