@@ -7,12 +7,15 @@ fs.readdir('../', function(err, files){
 	}
 	console.log("Nazwy folderow:\n".red + files);
 	var files = files;
-	fs.writeFile('../new.txt', files, function(err){
+	fs.writeFile('./new.txt', files, function(err){
 		if(err){
 			throw err;
 		}
 		console.log("zapisano!");
 		fs.readFile('../new.txt', 'utf-8', function(err, data){
+			if(err){
+				throw err;
+		}
 			console.log("nazwy folderow zapisane w pliku .txt:\n" .green + data);
 		});
 	});
