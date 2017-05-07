@@ -1,27 +1,19 @@
-var http = require('http');
-var fs = require("fs");
+var fs = require('fs');
+var colors = require('colors');
 
-var server = http.createServer();
-
-server.on('request', function(request, response) {
-            response.setHeader("Content-Type", "text/html; charset=utf-8");
-            if (request.method == 'GET' && request.url === "/") {
-                fs.readFile('./index.html', function(err, data) {
-                    if (err) throw err;
-                    response.write(data);
-                    response.end;
-                });
-
-            } else {
-
-                fs.readFile('cat.jpg', function(err, data) {
-                        if (err) throw err; 
-                        	response.statusCode = 404;
-                            response.writeHead(200, {
-                                'Content-Type': 'image/jpeg'
-                            });
-                            response.end(data); 
-                        })
-                    }
-                });
-            server.listen(8080);
+fs.readdir('../', function(err, files){
+	if(err){
+		throw err;
+	}
+	console.log("Nazwy folderow:\n".red + files);
+	var files = files;
+	fs.writeFile('../new.txt', files, function(err){
+		if(err){
+			throw err;
+		}
+		console.log("zapisano!");
+		fs.readFile('../new.txt', 'utf-8', function(err, data){
+			console.log("nazwy folderow zapisane w pliku .txt:\n" .green + data);
+		});
+	});
+});

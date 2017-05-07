@@ -1,17 +1,16 @@
 {
-  "name": "read",
+  "name": "1.4",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "dependencies": {
-    "colors": "^1.1.2"
-  },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node app/program.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.1.2"
+  }
 }
