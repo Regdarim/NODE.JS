@@ -1,0 +1,272 @@
+{
+  "_meta": {
+    "session_continuation": true,
+    "instructions_for_next_session": "Ten plik zawiera surowy research zebrany w poprzedniej sesji przez Exa MCP. Cel: wzbogacić wszystkie firmy danymi kontaktowymi (email, telefon, decydent + LinkedIn) używając Tavily/Firecrawl/SerpAPI (zakładam, że w tej sesji network policy zostala zmieniona). Wynik: plik Excel (.xlsx) gotowy do cold call/cold email.",
+    "user_request_pl": "Stworz profesjonalny Excel gotowy do cold call i cold email do 100 leadow z polski dla naszego targetu (Antik Holz Profis)",
+    "user_email": "dswiercz91@gmail.com",
+    "target_branch": "claude/eager-dirac-S28TC",
+    "previous_session_date": "2026-05-25"
+  },
+  "target_company": {
+    "name": "Antik Holz Profis (ANTIKHOLZ PROFIS)",
+    "url": "https://antikholzprofis.com",
+    "hq": "ul. Zamkowa 21, 26-260 Fałków, Poland",
+    "description": "Polski producent i hurtowy sprzedawca starego drewna - deski podłogowe, deski obiciowe, panele 3-warstwowe i 5-warstwowe, belki, drzwi z odzysku. Pozyskuje drewno z polskich rozbiórek (głównie sosna, świerk, jodła). Działa od 2011 na rynku europejskim. Pozycjonowanie: 'największa firma w Europie zajmująca się pozyskiwaniem i obróbką starego drewna'. Przerobiła ponad 5 000 000 m² desek w 12 lat. Sprzedaż międzynarodowa: PL, DE, EN, FR/IT.",
+    "phones": {
+      "german": ["+48 668 082 514", "+48 690 99 00 04"],
+      "english": "+48 577 707 100",
+      "polish": "+48 44 787 36 21",
+      "french_italian": "+48 509 601 060"
+    },
+    "ideal_customer_profile": "Profesjonalni odbiorcy B2B w Polsce kupujący materiały do projektów premium: producenci mebli rustykalnych/loft/vintage, stolarnie i pracownie projektowe, architekci wnętrz boutique (rustykalne/loft/industrial), firmy wykończeniowe hoteli/restauracji/SPA, deweloperzy boutique hoteli i agroturystyk górskich, hurtownie drewna/materiałów budowlanych szukające unikalnego surowca, firmy budujące domy z bali/drewniane, firmy renowacji zabytków, producenci podłóg rustykalnych, producenci drzwi i elewacji drewnianych",
+    "exclusions_competitors_pl": [
+      "Regalia (regalia.eu) - bezpośredni konkurent, robi własne meble ze starego drewna",
+      "Retrowood (retrowood.pl) - konkurent, własna manufaktura mebli ze starego drewna",
+      "Holy-Wood (holy-wood.pl) - konkurent, własna produkcja mebli ze starego drewna",
+      "Manufaktura Eco-Deco-Art (eco-deco-art.pl) - konkurent w meblach ze starego drewna"
+    ]
+  },
+  "user_requested_columns": [
+    "Firma",
+    "Strona WWW",
+    "Branża",
+    "Lokalizacja (miasto, województwo)",
+    "Decydent: Imię i nazwisko",
+    "Decydent: Stanowisko",
+    "Decydent: LinkedIn URL",
+    "Email (najlepiej osobisty decydenta, alternatywnie ogólny firmy)",
+    "Telefon (najlepiej bezpośredni, alternatywnie centrala)",
+    "ICP Fit Score (1-10)",
+    "Personalizacja / Trigger event (do otwarcia rozmowy w cold call/email)"
+  ],
+  "research_methodology": {
+    "tool_used_in_prev_session": "Exa web_search_exa via mcp__7b36f4a7-fb94-4782-b892-26fca26b9303__web_search_exa",
+    "queries_executed": 12,
+    "queries": [
+      "producent mebli z odzyskanego starego drewna Polska, meble loft rustykalne, manufaktura",
+      "pracownia stolarska Polska meble na wymiar stare drewno, stolarnia artystyczna",
+      "deweloper boutique hotel pensjonat agroturystyka górski Polska Zakopane Karkonosze drewniany",
+      "producent podłóg drewnianych Polska stare drewno deski podłogowe rustykalne",
+      "sklep meble loft industrialne vintage Polska, salon mebli rustykalnych",
+      "elewacja drewniana firma Polska, montaż okładzin drewnianych fasady, deski elewacyjne stare",
+      "architekt wnętrz Polska specjalizacja styl rustykalny loft industrialny, pracownia projektowa wnętrz",
+      "firma wykończenia wnętrz restauracji hoteli Polska, projektowanie i realizacja wnętrz gastronomia",
+      "hurtownia drewna Polska sprzedaż desek podłogowych elewacyjnych, dystrybutor materiałów drewnianych",
+      "firma budowa domów z bali drewnianych Polska, producent domów drewnianych szkieletowych",
+      "renowacja zabytków konserwacja drewna Polska, firma rekonstrukcja obiektów zabytkowych",
+      "producent drzwi drewnianych Polska na wymiar, drzwi loftowe rustykalne stare drewno"
+    ]
+  },
+  "next_session_plan": {
+    "step_1": "Sprawdź czy Tavily/Firecrawl/SerpAPI są teraz dostępne (curl -s -o /dev/null -w '%{http_code}\\n' https://api.tavily.com/)",
+    "step_2": "Wczytaj ten plik (research/leads_raw.json)",
+    "step_3": "Dla każdej firmy z 'leads' wykonaj enrichment: a) Tavily extract na URL firmy (lub /kontakt) → wyciągnij email/tel/adres z markdown; b) Tavily search '{nazwa firmy} CEO właściciel założyciel' → wyciągnij imię decydenta i LinkedIn; c) Tavily search '{nazwa firmy} LinkedIn' → znajdź profil firmy i kluczowych pracowników",
+    "step_4": "Dla każdej firmy oceń ICP fit (1-10) na podstawie: czy kupuje materiały (vs. tylko sprzedaje), wielkość firmy, dopasowanie produktowe, sygnały (nowe realizacje hotelowe, hiring, rozszerzenie oferty)",
+    "step_5": "Wygeneruj personalizację - 1-2 zdaniowy trigger event lub konkretne haczyk do cold outreach (najlepiej z realnej realizacji widocznej na ich stronie)",
+    "step_6": "Zapisz do pliku .xlsx używając openpyxl (z formatowaniem: header bold, kolumny szerokie, ICP fit kolorowane konditionally)",
+    "step_7": "Wyślij plik do użytkownika przez SendUserFile + zacommituj do brancha + utwórz/zaktualizuj PR",
+    "tool_priorities": [
+      "1. Tavily extract - na strony firmowe /kontakt, /o-nas, /zespol - najszybciej daje email/tel/imię",
+      "2. Tavily search - dla decydentów i LinkedIn profili (Tavily indeksuje LinkedIn lepiej niż Exa)",
+      "3. Firecrawl - jeśli Tavily nie poradzi sobie z konkretną stroną (JS-heavy SPAs)",
+      "4. SerpAPI Google search - jako ostatnia deska ratunku do triangulacji"
+    ],
+    "deduplication_rule": "Wykluczyć z finalnego Excela firmy z target_company.exclusions_competitors_pl (Regalia, Retrowood, Holy-Wood, Eco-Deco-Art) - są bezpośrednimi konkurentami Antik Holz",
+    "final_count_target": 100
+  },
+  "categories": {
+    "producent_mebli_stare_drewno": {
+      "ideal_for": "Antik Holz - kupują surowiec (deski, belki) jako wsad do swoich mebli. ALE niektórzy są konkurentami (Regalia, Retrowood, Holy-Wood). Zachować tylko tych, którzy NIE robią własnego pozyskania, tylko kupują surowiec.",
+      "icp_fit_default": 7
+    },
+    "stolarnia_pracownia": {
+      "ideal_for": "Stolarnie robiące meble na wymiar dla architektów i klientów premium - kupują materiał klasy 'rustic' jako wsad. Bardzo dobry segment.",
+      "icp_fit_default": 8
+    },
+    "architekt_wnetrz": {
+      "ideal_for": "Architekci specyfikują materiały do projektów - kanał dystrybucji do klientów końcowych. Niski direct revenue, wysoki influence.",
+      "icp_fit_default": 7
+    },
+    "boutique_hotel_pensjonat": {
+      "ideal_for": "Bezpośredni odbiorca produktów gotowych (drzwi, deski elewacyjne, podłogi) - inwestują w wystrój rustykalny/lokalny klimat. Wysoki ticket per project.",
+      "icp_fit_default": 6
+    },
+    "hurtownia_drewna": {
+      "ideal_for": "Potencjalni dystrybutorzy Antik Holz - rozszerzenie sieci sprzedaży. Antik Holz wprost na stronie woła 'Chcesz dołączyć do sieci dystrybutorów?'. NAJWYŻSZY PRIORYTET.",
+      "icp_fit_default": 9
+    },
+    "dom_z_bali_szkieletowy": {
+      "ideal_for": "Kupują duże ilości drewna i materiałów drewnianych - mogą używać starego drewna jako element wykończenia (belki sufitowe, elewacje, podłogi). Średni ICP.",
+      "icp_fit_default": 6
+    },
+    "producent_podlog": {
+      "ideal_for": "Producenci podłóg rustykalnych/postarzanych - bezpośredni odbiorca starych desek jako surowiec. ALE wielu już ma własną kolekcję 'old' z postarzanego nowego drewna - sprawdzić przy enrichment.",
+      "icp_fit_default": 7
+    },
+    "producent_drzwi": {
+      "ideal_for": "Producenci drzwi drewnianych premium - mogą kupować stare drewno do unikalnych projektów dla architektów. Antik Holz sam ma nową linię 'Drzwi z duszą' więc to też konkurent w niszy.",
+      "icp_fit_default": 5
+    },
+    "sklep_mebli_loft": {
+      "ideal_for": "Sklepy detaliczne mebli loft/industrial - kupują meble od producentów. Niska bezpośrednia wartość, chyba że robią private label.",
+      "icp_fit_default": 4
+    },
+    "renowacja_zabytkow": {
+      "ideal_for": "Firmy renowacji zabytków potrzebują autentycznego starego drewna (z odpowiedniej epoki) do rekonstrukcji - bardzo dobre dopasowanie produktowe, ale niska częstotliwość zamówień.",
+      "icp_fit_default": 8
+    },
+    "elewacja_drewniana": {
+      "ideal_for": "Firmy montujące elewacje drewniane - kupują deski elewacyjne. Antik Holz ma w ofercie deski obiciowe ze starego drewna - bardzo dobre dopasowanie.",
+      "icp_fit_default": 8
+    }
+  },
+  "leads": [
+    {"company_name": "Holy-Wood", "website": "https://holy-wood.pl", "category": "producent_mebli_stare_drewno", "notes": "KONKURENT - ma własne pozyskanie z kościołów", "exclude": true},
+    {"company_name": "Regalia", "website": "https://regalia.eu", "category": "producent_mebli_stare_drewno", "notes": "KONKURENT - własna manufaktura w Warmii/Mazurach", "exclude": true},
+    {"company_name": "Retrowood", "website": "https://retrowood.pl", "category": "producent_mebli_stare_drewno", "location_hint": "Gliwice, Galeria ReFORMA, ul. Pszczyńska 192", "notes": "KONKURENT - manufaktura z 2007, podlaskie chaty", "exclude": true},
+    {"company_name": "Manufaktura Eco-Deco-Art", "website": "https://eco-deco-art.pl", "category": "producent_mebli_stare_drewno", "notes": "Konkurent - polski producent mebli ze starego drewna", "exclude": true},
+    {"company_name": "Tylko Drewno", "website": "https://tylkodrewno.pl", "category": "producent_mebli_stare_drewno", "notes": "Producent mebli loft/rustykalnych ze starego drewna - sprawdzić czy kupuje surowiec"},
+    {"company_name": "Metal-Drewno", "website": "https://metal-drewno.pl", "category": "producent_mebli_stare_drewno", "location_hint": "okolice Krakowa", "notes": "Manufaktura mebli loft pod Krakowem - łączy stal z drewnem, może kupować stare deski"},
+    {"company_name": "Kerbe", "website": "https://kerbe.pl", "category": "producent_mebli_stare_drewno", "notes": "Polski producent mebli loftowych/industrialnych"},
+    {"company_name": "Mag Haus", "website": "https://maghaus-loft.pl", "category": "producent_mebli_stare_drewno", "notes": "Pracownia spawalnicza + meble loft/vintage, współpraca z architektami z NYC/Londynu/Paryża"},
+    {"company_name": "Lokum Stolarstwo", "website": "https://www.tarasylokum.pl", "category": "producent_mebli_stare_drewno", "notes": "Stoły ze starego drewna, blaty z desek rozbiórkowych - bardzo dobry profil"},
+    {"company_name": "By Wood", "website": "http://www.bywood.pl", "category": "producent_mebli_stare_drewno", "phone_hint": "+48 508 160 058", "email_hint": "bywood@bywood.pl", "notes": "Marka mebli z drewna z odzysku - stare deski, używane metale"},
+
+    {"company_name": "Pracownia Stolarska Tomasz Kuziemko", "website": "https://www.meble-kuziemko.pl", "category": "stolarnia_pracownia", "location_hint": "Raczki k. Szczecina", "notes": "Wykorzystuje 100-letnie drewno sosnowe z rozbiórek - już kupuje stare drewno, idealny lead"},
+    {"company_name": "Pracownia Stolarska Konar", "website": "https://stolarnia-konar.pl", "category": "stolarnia_pracownia", "location_hint": "Piaseczno, Mazowieckie", "notes": "Pracownia stolarsko-rzeźbiarska od 1995, meble ogrodowe i wewnętrzne z litego drewna"},
+    {"company_name": "Zakład Stolarski Piotrowscy", "website": "https://piotrowscy.com.pl", "category": "stolarnia_pracownia", "location_hint": "Cierpice k. Torunia", "notes": "Od 1985, renowacja antyków + meble na wymiar - potrzebują starego drewna do renowacji"},
+    {"company_name": "Ręcznie w Drewnie", "website": "https://www.reczniewdrewnie.pl", "category": "stolarnia_pracownia", "location_hint": "Bochnia, Małopolskie", "notes": "Pracownia stolarsko-tapicerska, renowacje mebli i antyków - kupuje stare drewno"},
+    {"company_name": "Tworzywo Concept", "website": "https://tworzywoconcept.pl", "category": "stolarnia_pracownia", "location_hint": "okolice Krakowa", "notes": "Stolarnia robiąca meble i podłogi w stylu rustykalnym/postarzanym"},
+    {"company_name": "Gierszewski Stolarstwo Artystyczne", "website": "https://gierszewski.pl", "category": "stolarnia_pracownia", "notes": "Renowacje dworków, pałaców, zabytków + meble artystyczne - top segment premium"},
+    {"company_name": "Pracownia Stolarska Dworska 17", "website": "https://pracownia-dworska17.pl", "category": "stolarnia_pracownia", "location_hint": "Tłuczania k. Krakowa, Małopolskie", "notes": "Meble na wymiar, kuchnie, drzwi, schody z litego drewna"},
+    {"company_name": "Drewniane Klimaty", "website": "https://drewnianeklimaty.pl", "category": "stolarnia_pracownia", "location_hint": "Trąbki Wielkie, Pomorskie (okolice Trójmiasta)", "notes": "Pracownia robiąca stoły z drewna rozbiórkowego i belek - bardzo dobry dopasowanie"},
+    {"company_name": "Alchemia Drewna", "website": "https://alchemiadrewna.pl", "category": "stolarnia_pracownia", "location_hint": "Sierakowice, Pomorskie", "notes": "Manufaktura mebli na zamówienie premium"},
+    {"company_name": "Stolarnia Brzesko (SUWMS)", "website": "https://stolarniabrzesko.pl", "category": "stolarnia_pracownia", "location_hint": "Brzesko, Małopolskie", "phone_hint": "+48 503 061 904", "notes": "Od 1991, Waldemar Szot - stoły z litego drewna"},
+    {"company_name": "Stolarnia Warszawska", "website": "https://stolarniawarszawska.pl", "category": "stolarnia_pracownia", "location_hint": "Warszawa Wawer, ul. Strzygłowska 37", "notes": "Niestandardowe meble, prototypy, design thinking - dla architektów"},
+    {"company_name": "Stolarstwo Samorodne", "website": "https://www.stolarstwo-samorodne.pl", "category": "stolarnia_pracownia", "notes": "Zakład Stolarstwa Artystycznego - drewno twarde, jesion, czereśnia, orzech, dąb"},
+    {"company_name": "Chyżyński Usługi Stolarskie", "website": "https://firma-stolarska.pl", "category": "stolarnia_pracownia", "location_hint": "Bydgoszcz", "notes": "40 lat doświadczenia, meble kuchenne na wymiar"},
+    {"company_name": "Dębowe Cuda", "website": "https://debowecuda.pl", "category": "stolarnia_pracownia", "notes": "Meble z litego drewna premium - dąb, czereśnia, jesion, orzech, klon. Sprzedaje też tarcicę"},
+
+    {"company_name": "Marcin Pingwara Architekt", "website": "https://proplo.pl/profile/marcin-pingwara-architekt", "category": "architekt_wnetrz", "location_hint": "Cała Polska", "notes": "Architekt wnętrz - style: art deco, boho, eklektyczny, glamour, industrialny, rustykalny - specyfikuje materiały"},
+    {"company_name": "Latre DESIGN", "website": "https://latre.pl", "category": "architekt_wnetrz", "location_hint": "Śląsk i Warszawa", "notes": "Pracownia Architektury Wnętrz - projekty mieszkań w stylu loftowym"},
+    {"company_name": "KOUZI - Klaudia Dołęgiewicz", "website": "https://kouzi.pl", "category": "architekt_wnetrz", "location_hint": "Wrocław", "phone_hint": "781-269-364", "email_hint": "biuro@kouzi.pl", "notes": "Autorska pracownia - ponadczasowe wnętrza z dobrych materiałów"},
+    {"company_name": "Pracownia Projektowa Wojciech Zieliński", "website": "https://www.homebook.pl/projekty/62963/mieszkanie-w-stylu-industrialnym-pracownia-projektowa-wojciech-zielinski", "category": "architekt_wnetrz", "notes": "Wiele projektów industrialnych, loft, glamour"},
+    {"company_name": "Florkiewicz Studio", "website": "https://florkiewiczstudio.com", "category": "architekt_wnetrz", "location_hint": "Łódź", "notes": "Architekt wnętrz Martyna Florkiewicz-Pietrzak - projekty industrialne z grafitową cegłą"},
+    {"company_name": "KaeR Projekt", "website": "https://kaerprojekt.pl", "category": "architekt_wnetrz", "notes": "Duet projektantek - kompleksowa obsługa od kreski po klucz"},
+    {"company_name": "Azyl Studio - Katarzyna Szczepanek", "website": "https://azylstudio.pl", "category": "architekt_wnetrz", "notes": "Wnętrza inspirowane naturą - boutique projektowanie"},
+    {"company_name": "PAMA - Patrycja Dybowska", "website": "https://proplo.pl/profile/pama", "category": "architekt_wnetrz", "notes": "Pracownia wnętrz - art deco, eklektyczny, industrialny, rustykalny"},
+    {"company_name": "Loftowo", "website": "https://loftowo.eu", "category": "architekt_wnetrz", "location_hint": "Warszawa, Bartycka 24/26", "notes": "Specjaliści od industrialnych wnętrz - drzwi, ścianki, kabiny, balustrady"},
+    {"company_name": "SRDK Studio", "website": "https://srdkstudio.com", "category": "architekt_wnetrz", "location_hint": "Wrocław", "notes": "Rewitalizacja zabytków - Lofty Platinum przy Inowrocławskiej, znają temat starego drewna"},
+
+    {"company_name": "SLOW TATRY Boutique Resort", "website": "https://slowtatry.pl", "category": "boutique_hotel_pensjonat", "location_hint": "Zakopane, 1000m npm", "notes": "Resort z meblami od polskich projektantów/rzemieślników, naturalne materiały - dokładnie ICP Antik Holz"},
+    {"company_name": "Pensjonat Nostalgia", "website": "https://pensjonatnostalgia.pl", "category": "boutique_hotel_pensjonat", "location_hint": "ul. Tyrolska 7, 58-564 Sosnówka, Karkonosze", "phone_hint": "+48 888 547 666", "email_hint": "info@pensjonatnostalgia.pl, rezerwacja@pensjonatnostalgia.pl", "notes": "Dom tyrolski z 1838, 'klimat z dawnych lat' - kupuje stare materiały do renowacji"},
+    {"company_name": "Chaty Świerkowe Wzgórze", "website": "https://www.chatyswierkowewzgorze.pl", "category": "boutique_hotel_pensjonat", "location_hint": "Karpacz, 830m npm", "notes": "Domki ze świerkowych bali, dach z osiki, drewniane okna - profil idealny dla starego drewna"},
+    {"company_name": "Na Pograniczu Agroturystyka", "website": "https://zieleniecnoclegi.pl", "category": "boutique_hotel_pensjonat", "location_hint": "Zieleniec/Spalona, Sudety", "notes": "Dom z 200-letnich rozbiórkowych bali - zna i ceni stare drewno"},
+    {"company_name": "Rysy Boutique Hotel", "website": "https://www.hotelrysy.pl", "category": "boutique_hotel_pensjonat", "location_hint": "ul. Seweryna Goszczyńskiego 7, 34-500 Zakopane", "phone_hint": "+48 18 201 18 00", "email_hint": "recepcja@hotelrysy.pl", "notes": "Boutique hotel 5*, kuchnia podhalańska premium"},
+    {"company_name": "Leśny Dwór Karpacz", "website": "https://www.lesnydwor.karpacz.pl", "category": "boutique_hotel_pensjonat", "location_hint": "Karpacz, Karkonosze", "notes": "Pensjonat z 1860r tradycja, rodzinny biznes - styl historyczny"},
+    {"company_name": "Jagodowa Polana", "website": "https://www.jagodowapolana.com", "category": "boutique_hotel_pensjonat", "location_hint": "Gorce", "notes": "Drewniany dom agroturystyczny - regionalny styl"},
+    {"company_name": "Górolik Bukowina Tatrzańska", "website": "http://czasnawypoczynek.pl/Noclegi,Bukowina+Tatrza%C5%84ska,E006560", "category": "boutique_hotel_pensjonat", "location_hint": "ul. Kościuszki 24, Bukowina Tatrzańska", "notes": "Dom Drewniany z Tradycją - pokoje wykończone drewnem"},
+    {"company_name": "Willa Fen Karpacz", "website": "https://willafen.pl", "category": "boutique_hotel_pensjonat", "location_hint": "ul. Marii Skłodowskiej-Curie 3a, 58-540 Karpacz", "notes": "Boutique z pokojami de lux i loftowymi"},
+    {"company_name": "KOKO Ryku Agroturystyka", "website": "https://kokoryku.pl", "category": "boutique_hotel_pensjonat", "location_hint": "Bieganów 41, 57-400 Nowa Ruda (Dolny Śląsk)", "phone_hint": "+48 506 642 654", "email_hint": "info@kokoryku.pl", "notes": "Wnętrza rustykalne, naturalne materiały - 'drewno pozostaje drewnem'"},
+    {"company_name": "Folkowy Dworek", "website": "https://folkowydworek.pl", "category": "boutique_hotel_pensjonat", "location_hint": "Murzasichle, Podhale", "notes": "Naturalne drewno, ręcznie wykonane detale"},
+    {"company_name": "Tatrzański Bór - Apartamenty i Karczma", "website": "https://www.tatrzanskibor.pl", "category": "boutique_hotel_pensjonat", "location_hint": "ul. Lichajówki 7-8, 34-531 Murzasichle", "phone_hint": "+48 884 837 100", "email_hint": "tatrzanskibor@gmail.com, karczma@tatrzanskibor.pl", "notes": "Drewniana karczma + apartamenty, 20 lat działalności"},
+    {"company_name": "Chyża Chata Bieszczady", "website": "https://chyzachatanakrancuswiata.com", "category": "boutique_hotel_pensjonat", "location_hint": "Bieszczady", "notes": "Drewniany dom rozbudowany na starej bojkowskiej chacie - profil idealny"},
+
+    {"company_name": "Sklad Drewna Legionowo", "website": "https://sklad-drewna.pl", "category": "hurtownia_drewna", "location_hint": "ul. Kościuszki 14, Legionowo, Mazowieckie", "phone_hint": "+48 22 215 94 57", "notes": "Hurtownia drewna C24, KVH, OSB, deski tarasowe i elewacyjne - potencjalny dystrybutor!"},
+    {"company_name": "Drewnotex", "website": "https://drewnotex.pl", "category": "hurtownia_drewna", "notes": "Producent więźby dachowej + deski elewacyjne i tarasowe, drewno skandynawskie i modrzew syberyjski"},
+    {"company_name": "Bober Drewno Skandynawskie", "website": "https://boberdrewno.pl", "category": "hurtownia_drewna", "location_hint": "Stołpie 14C, 22-151 Stołpie, Lubelskie", "phone_hint": "663 848 437", "email_hint": "biuro@boberdrewno.pl", "notes": "Hurt drewna skandynawskiego - sprzedaje deski elewacyjne, podłogowe, boazerię"},
+    {"company_name": "PRO-DREW", "website": "https://pro-drew.com", "category": "hurtownia_drewna", "notes": "Producent desek elewacyjnych modrzewiowych, sosnowych, świerkowych - może być partnerem do desek ze starego drewna"},
+    {"company_name": "Stamadrew", "website": "https://www.stamadrew.pl", "category": "hurtownia_drewna", "location_hint": "Oświęcim ul. Kolbego 13 (magazyn), Bielsko/Czechowice", "phone_hint": "+48 33 48 89 880, +48 609733343 (Ewa Góra), +48 691726380 (Mariusz Gajda)", "email_hint": "ewa@stamadrew.pl, mariusz@stamadrew.pl", "notes": "Producent desek tarasowych, elewacyjnych - hurt-detal"},
+    {"company_name": "Global Biznes Warszawa", "website": "https://global-biznes.pl", "category": "hurtownia_drewna", "location_hint": "Warszawa i Mazowieckie", "notes": "Hurtownia drewna konstrukcyjnego, tarasowego, elewacyjnego z dostawą HDS"},
+    {"company_name": "MAT-TAR", "website": "https://mat-tar.pl", "category": "hurtownia_drewna", "location_hint": "Wielkopolska", "notes": "70 lat tradycji, producent podłóg dębowych premium - kolekcja 'OLD Collection' - może być zainteresowany surowcem"},
+    {"company_name": "Centrum Drewna i Kompozytu", "website": "https://www.ecentrumdrewna.pl", "category": "hurtownia_drewna", "location_hint": "Kresowa 6, 04-206 Warszawa", "phone_hint": "698 948 712", "email_hint": "wyceny@ecentrumdrewna.pl", "contact_person_hint": "Piotr Czuk (właściciel)", "notes": "Sklep z deskami elewacyjnymi drewnianymi, kompleksowy montaż"},
+    {"company_name": "Tartak Forest", "website": "https://firmaforest.pl", "category": "hurtownia_drewna", "phone_hint": "+48 607 450 253, +48 84 65 10 302", "email_hint": "forest@firmaforest.pl", "notes": "Tartak od 1994, eksport do DE/NL/IT/FR/Skandynawii - mogą być zainteresowani"},
+    {"company_name": "Pimex - Deski elewacyjne", "website": "https://www.pimex.pl", "category": "hurtownia_drewna", "notes": "Deski elewacyjne kompozytowe i drewniane premium - dystrybutor"},
+    {"company_name": "Scandiwood", "website": "https://scandiwood.pl", "category": "hurtownia_drewna", "location_hint": "Starowiejska 1, 26-634 Gózd", "email_hint": "knazimak@gmail.com", "phone_hint": "+48 ... 09 6...", "notes": "Importer drewna skandynawskiego, deski elewacyjne i podłogowe"},
+    {"company_name": "Sordrew", "website": "https://www.sordrew.pl/tartak", "category": "hurtownia_drewna", "location_hint": "ul. Sztygarska 26, 41-608 Świętochłowice (Zabrze, Śląsk)", "notes": "Tartak z certyfikatem IPPC, drewno sosnowe i świerkowe"},
+    {"company_name": "Exotrade", "website": "https://exotrade.pl", "category": "hurtownia_drewna", "location_hint": "Al. Krakowska, 05-090 (Sękocin?)", "phone_hint": "+48 601 330 777 (Olga Mazurowska)", "email_hint": "olga@exotrade.pl", "contact_person_hint": "Olga Mazurowska (Dział Sprzedaży)", "notes": "Dystrybutor podłóg dębowych i egzotycznych - od 2002"},
+    {"company_name": "Drewnostacja", "website": "https://www.drewnostacja.pl", "category": "hurtownia_drewna", "notes": "Sklep z listwami, podłogami, schodami drewnianymi"},
+    {"company_name": "Drewno dla Domu", "website": "https://drewnodladomu.pl", "category": "hurtownia_drewna", "phone_hint": "12 345 03 31", "notes": "Sklep z drewnem na taras, elewację, podłogi - cała Polska"},
+    {"company_name": "Timber Trade", "website": "https://timbertrade.pl", "category": "hurtownia_drewna", "location_hint": "83-200 Nowa Wieś Rzeczna ul. Leśna 12C; 41-400 Mysłowice ul. Katowicka 60", "phone_hint": "+48 792 644 933, +48 666 644 933", "email_hint": "biuro@timbertrade.pl", "notes": "Jeden z największych dostawców drewna importowanego w Polsce"},
+
+    {"company_name": "Drewniany Kąt", "website": "https://drewnianykat.pl", "category": "dom_z_bali_szkieletowy", "notes": "Od 1994, domy z bali i szkieletowe - kupują dużo drewna"},
+    {"company_name": "Nest Homes", "website": "https://www.nest-homes.pl", "category": "dom_z_bali_szkieletowy", "notes": "Domy z bali okrągłych/profilowanych ze świerka karpackiego i sosny"},
+    {"company_name": "WoodDom", "website": "https://wooddom.pl", "category": "dom_z_bali_szkieletowy", "location_hint": "ul. Katowicka 3, 43-300 Bielsko-Biała, Śląsk", "notes": "Producent domów z pół bala, płaza, szkieletowych"},
+    {"company_name": "Marux Domy z Bali", "website": "https://marux.eu", "category": "dom_z_bali_szkieletowy", "location_hint": "Witoszów Dolny 135B, 58-100 Świdnica", "notes": "Domy z bali w całej Polsce, kompleksowo od fundamentów"},
+    {"company_name": "Dom z Bali Sp. z o.o. (Wimar)", "website": "https://www.drewno-dom.eu", "category": "dom_z_bali_szkieletowy", "location_hint": "Aleksandrów Łódzki", "notes": "Domy z bali toczonych, świerk górski 'SMREK' - ponad 3000 domów"},
+    {"company_name": "Domy Dembowscy (M&M)", "website": "https://domydembowscy.pl", "category": "dom_z_bali_szkieletowy", "notes": "Firma rodzinna - domy z bali naturalnych, altany, konstrukcje drewniane"},
+    {"company_name": "Wood-Home", "website": "https://wood-home.eu", "category": "dom_z_bali_szkieletowy", "location_hint": "Siemianowice Śląskie", "notes": "Producent domów modułowo-szkieletowych z drewna KVH, BSH, CLT"},
+    {"company_name": "Master-dom", "website": "https://master-dom.pl", "category": "dom_z_bali_szkieletowy", "notes": "Domy z bali całoroczne pod klucz, drewno klejone"},
+    {"company_name": "Stasiak Domki drewniane", "website": "https://stasiak.biz.pl", "category": "dom_z_bali_szkieletowy", "location_hint": "Warmia, Mazury, Pomorze, Kujawy", "notes": "Producent domów z drewna, własny tartak"},
+    {"company_name": "Project-Dom", "website": "https://project-dom.com.pl", "category": "dom_z_bali_szkieletowy", "notes": "Od 2006, domy szkieletowe, kanadyjskie, z bali"},
+    {"company_name": "Mawit", "website": "https://mawit.com.pl", "category": "dom_z_bali_szkieletowy", "location_hint": "Imielin, Śląsk", "notes": "Producent domów szkieletowych - drewno C24 z certyfikatem ZKP"},
+    {"company_name": "Domyzbali.pl (Biernacki)", "website": "https://domyzbali.pl", "category": "dom_z_bali_szkieletowy", "location_hint": "Łazy 95 k/Wyszkowa, 07-130 Łochów, Mazowieckie", "phone_hint": "+48 602 656 200, +48 602 656 300", "email_hint": "biernacki@domyzbali.pl", "contact_person_hint": "Stanisław Biernacki", "notes": "Domy szkieletowe + meble Loft Biernacki własnej produkcji"},
+    {"company_name": "Drewmar", "website": "https://www.domydrewmar.pl", "category": "dom_z_bali_szkieletowy", "notes": "Od 1996, domy szkieletowe z drewna klejonego KVH i belek dwuteowych"},
+    {"company_name": "Timber Moon Polska", "website": "https://timbermoon.eu", "category": "dom_z_bali_szkieletowy", "location_hint": "Brzezie, Małopolskie", "email_hint": "kontakt@timbermoon.eu", "notes": "Producent domów modułowo-szkieletowych, budowa w 4 tygodnie, inwestycje pod wynajem"},
+    {"company_name": "Mol-Sad Bud", "website": "https://molsadbud.pl", "category": "dom_z_bali_szkieletowy", "notes": "Domy szkieletowe całoroczne i letniskowe, tarasy drewniane"},
+
+    {"company_name": "GAJEWSKI Podłogi Drewniane", "website": "https://gajewski.com.pl", "category": "producent_podlog", "location_hint": "ul. Radomska 47, 26-650 Przytyk (Oblas)", "email_hint": "kontakt@gajewski.com.pl", "notes": "Producent podłóg drewnianych premium - kolekcja Colori Della Natura i Colori Primari, montaż VAT 8%"},
+    {"company_name": "MAD Podłogi", "website": "https://mad-podlogi.pl", "category": "producent_podlog", "notes": "Manufaktura podłóg postarzanych drewnianych - rzemieślnicze wykończenie, kupuje dąb premium"},
+    {"company_name": "Venifloor", "website": "https://venifloor.com", "category": "producent_podlog", "notes": "Podłoga fornirowana - kolekcja Dąb Belkowy inspirowana starymi belkami ze spichlerzy i stodół"},
+    {"company_name": "Andrewpol", "website": "https://andrewpol.com.pl", "category": "producent_podlog", "location_hint": "Białowieża region", "notes": "Od 1989, producent ekskluzywnych podłóg dębowych za ścianą Puszczy Białowieskiej, 100% drewno polskie"},
+    {"company_name": "Polish Floors (Pumori)", "website": "https://polishfloors.pl", "category": "producent_podlog", "notes": "Polski producent podłóg drewnianych, kolekcja Royal, eksport międzynarodowy"},
+    {"company_name": "Podłogi Łańcuckie", "website": "https://podlogilancuckie.pl", "category": "producent_podlog", "location_hint": "Łańcut, Podkarpackie", "notes": "Dębowe podłogi 3-warstwowe, premium i rustic"},
+    {"company_name": "Polskie Dęby", "website": "https://www.polskiedeby.pl", "category": "producent_podlog", "notes": "Tartak od 1956, sezonowanie dębów 5 lat - klasa Rustikal w ofercie (Dąb Promienisty, Bielony, Siny)"},
+    {"company_name": "Witan Posadzki (sklep)", "website": "https://sklep.witan-posadzki.pl", "category": "producent_podlog", "notes": "Dystrybutor: Jawor-Parkiet, Ter Huerne, Tarkett - podłogi premium"},
+    {"company_name": "Centrum Parkietowe NOWAK", "website": "https://www.centrum-parkietowe.pl", "category": "producent_podlog", "location_hint": "Bielsko-Biała", "notes": "Deski dębowe lite na zamówienie 500-1200mm"},
+    {"company_name": "Niezwykłe Drewno (Panele)", "website": "https://niezwykledrewno.pl", "category": "producent_podlog", "notes": "Panele podłogowe ze starego drewna - bezpośredni odbiorca surowca!"},
+    {"company_name": "Podłogi Łódź (FS Floor)", "website": "https://podlogilodz.pl", "category": "producent_podlog", "location_hint": "Łódź", "notes": "Producent podłóg postarzanych ARK Basic Rugged - dobry profil"},
+
+    {"company_name": "Mecner Drzwi i Okna", "website": "https://mecner.com.pl", "category": "producent_drzwi", "location_hint": "Słowackiego 2, 42-231 Kokawa", "notes": "Od 1975, drzwi i okna z litego drewna + renowacja zabytkowej stolarki w kościołach"},
+    {"company_name": "Davanzali Tarnów", "website": "https://davanzali.pl", "category": "producent_drzwi", "location_hint": "Tarnów", "notes": "28 lat doświadczenia, drzwi do kamienic i willi"},
+    {"company_name": "Stolarnia Paw", "website": "https://stolarnia-paw.pl", "category": "producent_drzwi", "notes": "Od 1945, drzwi z litego drewna - dąb, jesion, własny tartak"},
+    {"company_name": "Brylski Drzwi", "website": "https://brylskidrzwi.pl", "category": "producent_drzwi", "notes": "Drzwi drewniane na wymiar - dąb, jesion, sosna, buk, egzotyczne"},
+    {"company_name": "Stolczer", "website": "https://stolczer.pl", "category": "producent_drzwi", "notes": "Producent drzwi i schodów drewnianych, 30 lat na rynku"},
+    {"company_name": "Stolarstwo Sandomierz (Jacek Chorab)", "website": "http://stolarstwosandomierz.pl", "category": "producent_drzwi", "location_hint": "ul. Nowa 5, 27-600 Sandomierz", "contact_person_hint": "Jacek Chorab", "notes": "Drzwi unikatowe z dębu, jesionu, orzecha, meranti"},
+    {"company_name": "Drzwi Zewnętrzne Wit Stwosz", "website": "https://drzwizewnetrzne.waw.pl", "category": "producent_drzwi", "location_hint": "Warszawa i okolice", "notes": "Drewniane drzwi rzeźbione, rustykalne, prowansalskie - premium"},
+    {"company_name": "Stoljany - Ryszard Dziadziewicz", "website": "https://www.stoljany.pl", "category": "producent_drzwi", "contact_person_hint": "Ryszard Dziadziewicz", "notes": "Od 1993, drzwi dębowe rzeźbione na zamówienie, parapety, meble"},
+    {"company_name": "TOM-DREW", "website": "https://www.tomdrew.com.pl", "category": "producent_drzwi", "location_hint": "Śląsk (Skoczów, Cieszyn, Bielsko-Biała, Katowice, Wisła, Ustroń)", "notes": "Drzwi drewniane wewnętrzne/zewnętrzne na Śląsk + Czechy/Słowacja"},
+    {"company_name": "Drzwi Rustykalne (Chojnowski)", "website": "https://drzwirustykalne.pl", "category": "producent_drzwi", "contact_person_hint": "Justyna i Leszek Chojnowski", "notes": "Stolarnia robi drzwi rustykalne drewniane z okuciami - idealny profil"},
+    {"company_name": "Pracownia Stolarska Kubiczek", "website": "https://oferta.kubiczek-drzwi.pl", "category": "producent_drzwi", "location_hint": "Czechowice-Dziedzice", "contact_person_hint": "Sebastian Kubiczek", "notes": "40 lat, drzwi zewnętrzne i schody drewniane na wymiar"},
+    {"company_name": "Drzwi na wymiar (Warszawa)", "website": "http://www.drzwinawymiar.com", "category": "producent_drzwi", "location_hint": "Warszawa", "notes": "Mała rodzinna firma od 1990, drzwi z dębu, sosny, jesionu, mahoniu"},
+
+    {"company_name": "Zanzani", "website": "https://zanzani.pl", "category": "sklep_mebli_loft", "notes": "Sklep z meblami rustykalnymi/retro/loftowymi"},
+    {"company_name": "Loft 87", "website": "https://www.loft87.pl", "category": "sklep_mebli_loft", "notes": "Polska marka mebli loft - kompleksowe wyposażenie sklepów i lokali"},
+    {"company_name": "Loft-me Małopolska", "website": "https://loft-me.pl", "category": "sklep_mebli_loft", "location_hint": "Kraków", "notes": "Producent mebli industrialnych - metaloplastyka, designerskie"},
+    {"company_name": "Kunszt", "website": "https://sklep.kunszt.pl", "category": "sklep_mebli_loft", "location_hint": "ul. Kruszwicka 23, 71-043 Szczecin", "phone_hint": "+48 502 600 220", "email_hint": "kunszt@kunszt.pl", "contact_person_hint": "Elżbieta Łempicka", "notes": "Łóżka metalowe i sofy loft, rzemieślnicze"},
+    {"company_name": "LOFTLAND", "website": "https://loftland.com.pl", "category": "sklep_mebli_loft", "notes": "Producent mebli loftowych na zamówienie - drewno + metal"},
+    {"company_name": "Kludo", "website": "https://kludo.pl", "category": "sklep_mebli_loft", "notes": "Producent mebli industrialnych/loft - dąb fornir, stal proszkowa"},
+    {"company_name": "Loft and Design", "website": "https://loftanddesign.pl", "category": "sklep_mebli_loft", "notes": "Producent mebli industrialnych - sklejka dębowa, dąb, buk, metal, szkło"},
+    {"company_name": "Indigo Decor", "website": "https://indigodecor.pl", "category": "sklep_mebli_loft", "location_hint": "Salon Janki k. Warszawy", "notes": "Meble kolonialne, loftowe, ogrodowe - import + własne kolekcje"},
+    {"company_name": "Industrialove", "website": "https://industrialove.pl", "category": "sklep_mebli_loft", "notes": "Sklep z meblami industrialnymi - stoliki, konsole, akcesoria loft"},
+    {"company_name": "Loftowy Styl (Steel&Home)", "website": "https://loftowystyl.pl", "category": "sklep_mebli_loft", "notes": "Producent industrialnych podstaw meblowych, regałów, konsol"},
+    {"company_name": "Komandor Warszawa", "website": "https://komandorwarszawa.pl", "category": "sklep_mebli_loft", "location_hint": "Warszawa Wola, ul. Kasprzaka", "notes": "Meble na wymiar w stylu loft - duża sieć"},
+    {"company_name": "Meble Lindner", "website": "https://meblelindner.pl", "category": "sklep_mebli_loft", "notes": "Polski producent mebli industrialnych i glamour - własna produkcja"},
+
+    {"company_name": "Tabaszewski Renowacje", "website": "https://renowacjedrzwi.pl", "category": "renowacja_zabytkow", "location_hint": "ul. Podolska 1A, 48-303 Nysa, Opolskie", "phone_hint": "+48 607 983 373, +48 77 448 40 04", "notes": "Renowacja stolarki zabytkowej, drzwi, okien"},
+    {"company_name": "Zakład Konserwacji Stolarki Zabytkowej", "website": "http://stolarkazabytkowa.com.pl", "category": "renowacja_zabytkow", "location_hint": "ul. Romera 1b, 58-570 Jelenia Góra", "notes": "Renowacja i rekonstrukcja zabytkowej stolarki"},
+    {"company_name": "Pason Wood Constructions", "website": "https://mpason.pl", "category": "renowacja_zabytkow", "notes": "Renowacja drewnianych obiektów zabytkowych, kapliczki, rezydencje historyczne"},
+    {"company_name": "PPKZ - Polskie Pracownie Konserwacji Zabytków", "website": "https://www.ppkz.pl", "category": "renowacja_zabytkow", "notes": "70 lat tradycji, największa firma konserwatorska w Polsce, projekty międzynarodowe"},
+    {"company_name": "Akant Renowacje", "website": "https://www.akant-renowacje.pl", "category": "renowacja_zabytkow", "notes": "Od 1983, renowacja stolarki zabytkowej, sztukateria, rzeźby"},
+    {"company_name": "Remerus Liessen", "website": "https://remerus.pl", "category": "renowacja_zabytkow", "notes": "Konserwacja obiektów zabytkowych - mury kurtynowe, baszty, pałace"},
+    {"company_name": "Tartak Witkowscy - Szkutnictwo Tradycyjne", "website": "https://www.wiazar.pl", "category": "renowacja_zabytkow", "notes": "Rekonstrukcje obiektów sakralnych, dworków, replik szkut wiślańskich - bardzo specjalistyczne"},
+    {"company_name": "IG Partner Zabytki24", "website": "https://zabytki24.pl", "category": "renowacja_zabytkow", "notes": "20 lat doświadczenia, remont kościołów, dachy, ołtarze"},
+    {"company_name": "Marko - Marek Rakowski", "website": "https://markorakowski.pl", "category": "renowacja_zabytkow", "location_hint": "Olsztyn, Warmia i Mazury", "contact_person_hint": "Marek Rakowski", "notes": "50 obiektów na Mazurach i Warmii, większość zabytków Olsztyna"},
+    {"company_name": "ICONA Prace Wysokościowe", "website": "http://www.wysokoscioweprace.entro.pl", "category": "renowacja_zabytkow", "location_hint": "Bydgoszcz, Toruń", "notes": "Konserwacja architektury drewnianej metodami alpinizmu przemysłowego"},
+    {"company_name": "Zakład Stolarski Paszkowycz", "website": "https://www.paszkowycz.pl", "category": "renowacja_zabytkow", "location_hint": "ul. Wypoczynkowa 2, Łódź", "notes": "Renowacja zabytkowych drzwi, mebli, sufitów drewnianych"},
+    {"company_name": "SpaceML", "website": "https://spaceml.pl", "category": "renowacja_zabytkow", "notes": "Remonty i konserwacja elementów o wysokiej wartości - nieruchomości premium"},
+    {"company_name": "Ars Et Restauro - Ewa Tymcik", "website": "https://ars-et-restauro.pl", "category": "renowacja_zabytkow", "contact_person_hint": "Ewa Tymcik (właściciel)", "notes": "Renowacje kościołów, dworów, polichromii ściennych"},
+    {"company_name": "Pracownia Sztukatorska Adam Rzadkowski", "website": "https://sztukatorstwo.pl", "category": "renowacja_zabytkow", "contact_person_hint": "Adam Rzadkowski", "notes": "Renowacja detali architektonicznych, sztukaterii, elewacji zabytkowych"},
+
+    {"company_name": "Sikor Home Bud", "website": "https://sikorhomebud.pl", "category": "elewacja_drewniana", "location_hint": "Warszawa", "notes": "Elewacje drewniane wentylowane, modrzew syberyjski, świerk skandynawski, cedr"},
+    {"company_name": "Ekodrewno / Foxtrend", "website": "https://elewacje-drewniane.pl", "category": "elewacja_drewniana", "location_hint": "Wrocław", "contact_person_hint": "Bartłomiej Nowak (deski), Krzysztof Kujawa (systemy)", "phone_hint": "572 715 740 (Bartek), 504 222 521 (Krzysztof)", "email_hint": "bartek@ekodrewno.pl, kujawa@ekodrewno.pl", "notes": "20 lat - elewacje drewniane wentylowane, deski MOCOPINUS, system FOX"},
+    {"company_name": "Ecomodus Elewacje z Drewna", "website": "https://elewacjezdrewna.pl", "category": "elewacja_drewniana", "notes": "Produkcja i montaż elewacji drewnianych na terenie całej Polski"},
+    {"company_name": "Pracownia Stolarska Latzke", "website": "https://hjlatzke.pl", "category": "elewacja_drewniana", "phone_hint": "692 093 912", "email_hint": "biuro@hjlatzke.pl", "notes": "Elewacje wentylowane z modrzewia/thermo sosny/thermo jesionu - północna, zachodnia, centralna Polska"},
+    {"company_name": "Fabryka Drewna", "website": "https://fabrykadrewna.pl", "category": "elewacja_drewniana", "notes": "Montaż elewacji, tarasów, zadaszeń, pergoli - własna sprzedaż drewna"},
+    {"company_name": "Wood of Fire", "website": "https://www.woodoffire.pl", "category": "elewacja_drewniana", "phone_hint": "+48 782 603 318, +48 601 883 938, +48 695 166 033", "email_hint": "info@woodoffire.pl", "notes": "Drewno opalane Shou Sugi Ban, montaż elewacji"},
+    {"company_name": "Dombal", "website": "https://dombal.com.pl", "category": "elewacja_drewniana", "location_hint": "ul. Kadetów 8, 03-987 Warszawa", "phone_hint": "+48 22 672 00 10", "email_hint": "info@dombal.com.pl", "notes": "Montaż elewacji drewnianych i kompozytowych, modrzew syberyjski, thermo sosna"},
+    {"company_name": "Polskie Drewno (Lwówek Śląski)", "website": "https://polskie-drewno.pl", "category": "elewacja_drewniana", "location_hint": "Włodzice Wielkie 18, 59-600 Lwówek Śląski", "phone_hint": "75 784 1101, 601 055 550", "email_hint": "biuro@polskie-drewno.pl", "notes": "Producent desek tarasowych modrzewiowych i elewacyjnych"},
+    {"company_name": "Jan Bud Drew Gont", "website": "https://jan-bud-drew-gont.pl", "category": "elewacja_drewniana", "location_hint": "Podsarnie 1A, 34-721 Podsarnie (Podhale)", "phone_hint": "+48 502 303 900", "contact_person_hint": "Jan Bielak", "notes": "Elewacje drewniane budynków + gont elewacyjny - cała Polska"},
+    {"company_name": "Drew-Pol Sidzina", "website": "https://drewpolsidzina.pl", "category": "elewacja_drewniana", "location_hint": "Sidzina", "notes": "Producent drewna profilowanego, deski elewacyjne modrzewiowe i półbale"}
+  ]
+}
