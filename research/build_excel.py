@@ -9,9 +9,13 @@ from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from enrichment_data import ENRICH  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "research" / "leads_raw.json"
-OUT = ROOT / f"Antik_Holz_Leads_PL_100_{date.today().isoformat()}.xlsx"
+OUT = ROOT / f"Antik_Holz_Leads_PL_100_ENRICHED_{date.today().isoformat()}.xlsx"
 
 CATEGORY_PL = {
     "hurtownia_drewna": "Hurtownia drewna / dystrybutor",
@@ -158,19 +162,30 @@ def main():
         company = l.get("company_name", "")
         website = l.get("website", "")
         location = l.get("location_hint", "")
-        decydent = l.get("contact_person_hint", "")
-        stanowisko = ""
+
+        # Apply enrichment data (Exa web_fetch on /kontakt pages)
+        enrich = ENRICH.get(company, {})
+
+        decydent = enrich.get("contact_person") or l.get("contact_person_hint", "")
+        stanowisko = enrich.get("position", "")
         # Try to split if contact_person_hint contains "(stanowisko)"
         m = re.match(r"^(.*?)\s*\((.*?)\)\s*$", decydent)
         if m:
             decydent = m.group(1).strip()
-            stanowisko = m.group(2).strip()
-        elif decydent:
-            stanowisko = "Właściciel / Założyciel"  # best guess for SME
+            if not stanowisko:
+                stanowisko = m.group(2).strip()
+        elif decydent and not stanowisko:
+            stanowisko = "Właściciel / Założyciel"
 
-        linkedin = ""  # not collected in this phase
-        email = l.get("email_hint", "")
-        phone = normalize_phone(l.get("phone_hint", ""))
+        linkedin = ""
+        email = enrich.get("email") or l.get("email_hint", "")
+        phone = normalize_phone(enrich.get("phone") or l.get("phone_hint", ""))
+        # Address override from enrichment (more reliable)
+        if enrich.get("address"):
+            location = enrich["address"]
+        # Append phone_extra to phone if any
+        if enrich.get("phone_extra"):
+            phone = (phone + " | " + enrich["phone_extra"]) if phone else enrich["phone_extra"]
         personalizacja = PERSONALIZATION.get(l["category"], "")
         notes = l.get("notes", "")
         if notes:
